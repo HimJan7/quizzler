@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'question.dart';
+import 'quiz_brain.dart';
 
 void main() => runApp(Quizzler());
 
@@ -29,19 +29,32 @@ class QuizPage extends StatefulWidget {
 }
 
 class _QuizPageState extends State<QuizPage> {
-  int index = 0;
   int rightCount = 0, wrongCount = 0;
   List<Icon> scoreKeeper = [];
 
-  List<QuestionList> questionBank = [
-    QuestionList(
-        question: 'You can lead a cow down stairs but not up stairs.',
-        answer: true),
-    QuestionList(
-        question: 'Approximately one quarter of human bones are in the feet.',
-        answer: false),
-    QuestionList(question: 'A slug\'s blood is green.', answer: true)
-  ];
+  QuizBrain quizObject = QuizBrain();
+
+  void checkAnswer(bool userAns) {
+    if (quizObject.getAns() == userAns) {
+      scoreKeeper.add(
+        const Icon(
+          Icons.check,
+          color: Colors.green,
+        ),
+      );
+    } else {
+      scoreKeeper.add(const Icon(
+        Icons.close,
+        color: Colors.red,
+      ));
+    }
+
+    setState(
+      () {
+        quizObject.nextQue();
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +68,7 @@ class _QuizPageState extends State<QuizPage> {
             padding: EdgeInsets.all(10.0),
             child: Center(
               child: Text(
-                questionBank[index].question,
+                quizObject.getQue(),
                 textAlign: TextAlign.center,
                 style: const TextStyle(
                   fontSize: 25.0,
@@ -70,22 +83,7 @@ class _QuizPageState extends State<QuizPage> {
             padding: EdgeInsets.all(15.0),
             child: ElevatedButton(
               onPressed: () {
-                if (questionBank[index].answer == true) {
-                  rightCount++;
-                } else {
-                  wrongCount++;
-                }
-
-                setState(
-                  () {
-                    index = (1 + index) % questionBank.length;
-
-                    scoreKeeper.add(const Icon(
-                      Icons.check,
-                      color: Colors.green,
-                    ));
-                  },
-                );
+                checkAnswer(true);
               },
               style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.all(Colors.green),
@@ -108,21 +106,7 @@ class _QuizPageState extends State<QuizPage> {
                 backgroundColor: MaterialStateProperty.all(Colors.red),
               ),
               onPressed: () {
-                if (questionBank[index].answer == false) {
-                  rightCount++;
-                } else {
-                  wrongCount++;
-                }
-                setState(
-                  () {
-                    index = (1 + index) % questionBank.length;
-
-                    scoreKeeper.add(const Icon(
-                      Icons.close,
-                      color: Colors.red,
-                    ));
-                  },
-                );
+                checkAnswer(false);
               },
               child: const Text(
                 'False',
