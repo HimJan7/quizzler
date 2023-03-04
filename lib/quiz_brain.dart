@@ -1,4 +1,5 @@
 import 'question.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 
 class QuizBrain {
   int _index = 0;
@@ -25,9 +26,16 @@ class QuizBrain {
     return _questionBank.length;
   }
 
-  void nextQue() {
+  bool nextQue() {
     if (_index < _questionBank.length - 1) {
       _index++;
+      return true;
+    } else {
+      return false;
     }
+  }
+
+  void reset() {
+    _index = 0;
   }
 }

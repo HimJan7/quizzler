@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'quiz_brain.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 
 void main() => runApp(Quizzler());
 
@@ -51,7 +52,15 @@ class _QuizPageState extends State<QuizPage> {
 
     setState(
       () {
-        quizObject.nextQue();
+        if (quizObject.nextQue() == false) {
+          Alert(
+                  context: context,
+                  title: "Finished!",
+                  desc: "You've reached the end of quiz.")
+              .show();
+          quizObject.reset();
+          scoreKeeper.clear();
+        }
       },
     );
   }
