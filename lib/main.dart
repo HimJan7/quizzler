@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'question.dart';
 
 void main() => runApp(Quizzler());
 
@@ -32,13 +33,15 @@ class _QuizPageState extends State<QuizPage> {
   int rightCount = 0, wrongCount = 0;
   List<Icon> scoreKeeper = [];
 
-  List<String> questions = [
-    'You can lead a cow down stairs but not up stairs.',
-    'Approximately one quarter of human bones are in the feet.',
-    'A slug\'s blood is green.'
+  List<QuestionList> questionBank = [
+    QuestionList(
+        question: 'You can lead a cow down stairs but not up stairs.',
+        answer: true),
+    QuestionList(
+        question: 'Approximately one quarter of human bones are in the feet.',
+        answer: false),
+    QuestionList(question: 'A slug\'s blood is green.', answer: true)
   ];
-
-  List<bool> answers = [true, false, true];
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +55,7 @@ class _QuizPageState extends State<QuizPage> {
             padding: EdgeInsets.all(10.0),
             child: Center(
               child: Text(
-                questions[index],
+                questionBank[index].question,
                 textAlign: TextAlign.center,
                 style: const TextStyle(
                   fontSize: 25.0,
@@ -67,9 +70,7 @@ class _QuizPageState extends State<QuizPage> {
             padding: EdgeInsets.all(15.0),
             child: ElevatedButton(
               onPressed: () {
-                bool correctAnswer = answers[index];
-
-                if (correctAnswer == true) {
+                if (questionBank[index].answer == true) {
                   rightCount++;
                 } else {
                   wrongCount++;
@@ -77,7 +78,7 @@ class _QuizPageState extends State<QuizPage> {
 
                 setState(
                   () {
-                    index = (1 + index) % questions.length;
+                    index = (1 + index) % questionBank.length;
 
                     scoreKeeper.add(const Icon(
                       Icons.check,
@@ -107,15 +108,14 @@ class _QuizPageState extends State<QuizPage> {
                 backgroundColor: MaterialStateProperty.all(Colors.red),
               ),
               onPressed: () {
-                bool correctAnswer = answers[index];
-                if (correctAnswer == false) {
+                if (questionBank[index].answer == false) {
                   rightCount++;
                 } else {
                   wrongCount++;
                 }
                 setState(
                   () {
-                    index = (1 + index) % questions.length;
+                    index = (1 + index) % questionBank.length;
 
                     scoreKeeper.add(const Icon(
                       Icons.close,
